@@ -2,20 +2,14 @@
 
 __version__ = "0.1.0"
 
-from .calculator import add, subtract
-from .calculator import multiply, divide
-from .calculator import (
-    power,
-    square_root,
-    factorial,
-)
+from .calculator import add, divide, factorial, multiply, power, square_root, subtract
 
 __all__ = [
     "add",
-    "subtract",
-    "multiply",
     "divide",
+    "factorial",
+    "multiply",
     "power",
     "square_root",
-    "factorial",
+    "subtract",
 ]
