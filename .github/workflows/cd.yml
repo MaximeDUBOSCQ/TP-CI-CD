@@ -1,0 +1,44 @@
+name: CD
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  TWINE_USERNAME: __token__
+  TWINE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine
+
+      - name: Build distributions
+        run: python -m build
+
+      - name: Verify distributions
+        run: python -m twine check dist/*
+
+      - name: Publish to GitHub Packages (Python)
+        run: |
+          python -m twine upload \
+            --repository-url https://pypi.pkg.github.com/${{ github.repository_owner }} \
+            dist/*
